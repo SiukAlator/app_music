@@ -838,9 +838,10 @@ exports.apiItunnes = function(callback, params) {
 		},
 		timeout : Config.timeOut
 	});
-	// var token = params['token'];
-	Ti.API.info('URL:',  Config.SERVER_BASE_URL + 'search?term=in+utero&mediaType=music&limit=20');
-	client.open('GET', Config.SERVER_BASE_URL + 'search?term=in+utero&mediaType=music&limit=20');
+	var textFind = params['text'];
+	
+	// Ti.API.info('URL:',  Config.SERVER_BASE_URL + 'search?term='+textFind+'&mediaType=music&limit=20');
+	client.open('GET', Config.SERVER_BASE_URL + 'search?term='+textFind+'&mediaType=music&limit=20');
 	// client.setRequestHeader('Api_version', Config.api_version);
 	// client.setRequestHeader('Token', token);
 	client.send();

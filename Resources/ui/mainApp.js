@@ -33,7 +33,7 @@ function mainApp() {
 		height: Ti.UI.SIZE,
 		width: Ti.UI.FILL,
 		layout: 'vertical'
-		
+
 	});
 
 	if (Config.isAndroid) {
@@ -41,7 +41,7 @@ function mainApp() {
 	}
 
 	var work = [];
-	var googleLogin;
+	var inputSearch;
 
 	var nav;
 
@@ -95,10 +95,60 @@ function mainApp() {
 
 	function construct() {
 
+		inputSearch = Ti.UI.createTextField({
+			width: Ti.UI.FILL,
+			left: '10dp',
+			height: '42dp',
+			font: {
+				fontSize: '16dp'
+			},
+			borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
+			hintTextColor: '#AFADAA',
+			autocorrect: true,
+			color: Config.color1,
+			keyboardType: Ti.UI.KEYBOARD_TYPE_DEFAULT,
+			textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+			touchEnabled: true,
+			hintText: 'Buscar...',
+			backgroundColor: 'transparent',
+			bubbleParent: false
+
+		});
+		var waitForPause, pauseDelay = 1000;
+
+		inputSearch.addEventListener('return', function (e) {
+			var pattern = e.source.value;
+			flagKeyboardUP = true;
+			flagDepartamentoInputUC = 0;
+			callApi(pattern);
+
+
+		});
+
 		var myLoginIndicator = Ti.UI.createActivityIndicator({
 			style: Config.isAndroid ? Ti.UI.ActivityIndicatorStyle.BIG_DARK : Ti.UI.ActivityIndicatorStyle.BIG,
 			height: '120dp',
 			width: '120dp'
+		});
+
+		var boxSearch = Ti.UI.createView({
+			borderColor: Config.colorBar,
+			borderRadius: Config.bigborderRadius,
+			backgroundColor: Config.colorWallpaper1,
+			borderWidth: '1dp',
+			top: '10dp',
+			height: '50dp',
+			left: Config.marginViewSeguimiento,
+			right: Config.marginViewSeguimiento,
+			bubbleParent: false
+		});
+
+
+		var iconSearch = Ti.UI.createImageView({
+			image: '/images/buscar.png',
+			height: '30dp',
+			width: '30dp',
+			right: '10dp'
 		});
 
 		var mask1 = Ti.UI.createView({
@@ -131,13 +181,13 @@ function mainApp() {
 			backgroundColor: Config.colorPrimario1
 		});
 
-		boxTop.addEventListener('click', function(e) {
+		boxTop.addEventListener('click', function (e) {
 			hideSoftKeyboard();
 		});
 
 		var boxDesa = null;
 
-	
+
 
 		var boxTitle = Ti.UI.createView({
 			top: '30dp',
@@ -179,26 +229,35 @@ function mainApp() {
 		});
 
 
+		// boxTitle.add(pic);
+		// boxTitle.add(head1Label);
+		// boxTitle.add(head2Label);
 
-		boxTitle.add(pic);
-		boxTitle.add(head1Label);
-		boxTitle.add(head2Label);
-		boxTop.add(boxTitle);
+		iconSearch.addEventListener('click', function (e) {
+			flagKeyboardUP = true;
+			flagDepartamentoInputUC = 0;
+			var pattern = inputSearch.value;
+			/*idSelector = 0 para body UC*/
+			callApi(pattern);
+
+		});
+
+		boxSearch.add(inputSearch);
+		boxSearch.add(iconSearch);
+		boxTop.add(boxSearch);
 
 		/* Llamada a API iTunnes */
 		for (var w in work) {
 			work[w].show();
 		}
-		var params = {
-		};
-		xhr.apiItunnes(setListMusic, params);
-		
 
-		
+
+
+
 		scroll1.add(boxTop);
 		scroll1.add(boxBottom);
 
-		
+
 
 		//TODO
 		if (Config.modeURL == 0)
@@ -222,22 +281,27 @@ function mainApp() {
 		xhr.authurl(gotUrl);
 	}
 
-	function setListMusic(data)
-	{
-	
+	function callApi(textSearch) {
+		Ti.API.info('textSearch:', textSearch);
+		var params = {
+			text: textSearch
+		};
+		xhr.apiItunnes(setListMusic, params);
+	}
+	function setListMusic(data) {
 
-		
+
+
 		var rows = [];
 		tvListMusic.removeAllChildren();
 		if (data.resultCount == 0) {
 			tvListMusic.setHeight('0dp');
 		}
-		else
-		{
+		else {
 			tvListMusic.setHeight(Ti.UI.FILL);
 
 			for (var i = 0; i < data.results.length && i <= 20; i++) {
-				Ti.API.info('result:', data.results[i]);
+				// Ti.API.info('result:', data.results[i]);
 				var rowBoxOrange = Ti.UI.createView({
 					backgroundColor: Config.colorPrimario2,
 					height: Config.heightRowBoxOrange,
@@ -252,6 +316,7 @@ function mainApp() {
 					height: '70dp',
 					touchEnabled: true,
 					ind: i,
+					data: data.results[i],
 					id: data.results[i].trackId,
 					backgroundSelectedColor: Config.white,
 					opacity: 0.07
@@ -287,22 +352,26 @@ function mainApp() {
 					touchEnabled: false
 				});
 
-				// contentDepto.addEventListener('click', function (e) {
-				// 	if (clicking == false) {
-				// 		clicking = true;
-				// 		for (var w in work) {
-				// 			work[w].show();
-				// 		}
-				// 		indexID = e.source.ind;
-				// 		flagDepartamentoInputUC = 1;
-				// 		inputSearch.value = e.source.depto;
-				// 		flagAutocomplete = 1;
-				// 		//ripple.effect(e);
-				// 		filtrarUC();
-				// 		finish();
-				// 		clicking = false;
-				// 	}
-				// });
+				contentDepto.addEventListener('click', function (e) {
+					if (clicking == false) {
+						clicking = true;
+						for (var w in work) {
+							work[w].show();
+						}
+						Ti.API.info('data:', e.source.data);
+						for (var w in work) {
+							work[w].hide();
+						}
+						// indexID = e.source.ind;
+						// flagDepartamentoInputUC = 1;
+						// inputSearch.value = e.source.depto;
+						// flagAutocomplete = 1;
+						// //ripple.effect(e);
+						// filtrarUC();
+						// finish();
+						clicking = false;
+					}
+				});
 
 				contentDepto.add(rowBoxOrange);
 				contentDepto.add(labelDepto);
@@ -447,7 +516,7 @@ function mainApp() {
 	}
 
 	function loginResponse(result) {
-		
+
 		/*
 		Config.tracker.addEvent({
 			category: trackerName,
@@ -681,7 +750,7 @@ function mainApp() {
 
 				if (Config.intentData.split('login?')[1].split('=')[0] == 'email') {
 
-		
+
 					var params = {
 						email: Config.intentData.split('email=')[1].split('&')[0],
 						code: Config.intentData.split('code=')[1].split('&')[0],
