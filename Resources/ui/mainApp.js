@@ -1,0 +1,747 @@
+var Config = require('/libs/Config');
+var ripple = require('/libs/Ripple');
+var xhr = require('/mods/xhr');
+//var db = require('/mods/db');
+
+function mainApp() {
+
+
+	var clicking = false;
+	var imageWallpaper = Config.wallpaperApp;
+
+	var local = Config.locale;
+	// TODO: 64dp
+	var heightBoxBottom = '0dp';
+	var self = Ti.UI.createWindow({
+		title: L('login_title'),
+		navBarHidden: false,
+		exitOnClose: false,
+		windowSoftInputMode: Config.softInput,
+		backgroundColor: Config.backgroundColor,
+		barColor: Config.actionbarBackgroundColor,
+		navTintColor: Config.titleButtonColor,
+		orientationModes: Config.orientation,
+		titleAttributes: {
+			color: Config.titleTextColor
+		}
+	});
+
+	var boxBottom = Ti.UI.createView({
+		top: '0dp',
+		left: '0dp',
+		right: '0dp',
+		height: Ti.UI.SIZE,
+		width: Ti.UI.FILL,
+		layout: 'vertical'
+		
+	});
+
+	if (Config.isAndroid) {
+		self.exitOnClose = true;
+	}
+
+	var work = [];
+	var googleLogin;
+
+	var nav;
+
+	var content = Ti.UI.createView({
+		width: Ti.UI.FILL,
+		height: Ti.UI.FILL,
+		bottom: '0dp',
+		top: '0dp'
+	});
+
+	var work1 = Ti.UI.createView({
+		height: Ti.UI.FILL,
+		width: Ti.UI.FILL,
+		zindex: 999
+	});
+
+
+
+	if (!Config.isAndroid) {
+
+		nav = Ti.UI.iOS.createNavigationWindow({
+			window: self
+		});
+
+	}
+
+	var barShadow = Ti.UI.createView({
+		backgroundColor: Config.shadowColor,
+		top: '0dp',
+		height: Config.shadowHeight,
+		width: Ti.UI.FILL
+	});
+
+	content.add(barShadow);
+	var passInput = Ti.UI.createTextField();
+	var userInput = Ti.UI.createTextField();
+
+	var scroll1;
+
+	var tvListMusic = Ti.UI.createTableView({
+		width: Ti.UI.FILL,
+		height: Ti.UI.FILL,
+		top: '0dp',
+		bottom: '10dp',
+		layout: 'vertical',
+		showVerticalScrollIndicator: true,
+		backgroundColor: 'transparent',
+		// backgroundColor: Config.red,
+		separatorStyle: Titanium.UI.TABLE_VIEW_SEPARATOR_STYLE_NONE
+	});
+
+	function construct() {
+
+		var myLoginIndicator = Ti.UI.createActivityIndicator({
+			style: Config.isAndroid ? Ti.UI.ActivityIndicatorStyle.BIG_DARK : Ti.UI.ActivityIndicatorStyle.BIG,
+			height: '120dp',
+			width: '120dp'
+		});
+
+		var mask1 = Ti.UI.createView({
+			backgroundColor: Config.black,
+			opacity: 0.6,
+			height: Ti.UI.FILL,
+			width: Ti.UI.FILL,
+			visible: false
+		});
+
+		scroll1 = Ti.UI.createScrollView({
+			showVerticalScrollIndicator: true,
+			width: Ti.UI.FILL,
+			height: Ti.UI.FILL,
+			layout: 'vertical',
+			scrollType: 'vertical',
+			top: '0dp',
+			//bottom : '60dp',
+			left: '1dp',
+			right: '1dp'
+		});
+
+
+
+		var boxTop = Ti.UI.createView({
+			top: '0dp',
+			height: '80dp',
+			width: Ti.UI.FILL,
+			//layout: 'vertical',
+			backgroundColor: Config.colorPrimario1
+		});
+
+		boxTop.addEventListener('click', function(e) {
+			hideSoftKeyboard();
+		});
+
+		var boxDesa = null;
+
+	
+
+		var boxTitle = Ti.UI.createView({
+			top: '30dp',
+			height: Ti.UI.SIZE,
+			width: '190dp'
+		});
+
+		var pic = Ti.UI.createImageView({
+			image: '/images/icon_play_2.png',
+			height: '60dp',
+			width: '60dp',
+			top: '-5dp',
+			right: '140dp',
+			touchEnabled: false
+		});
+
+		var head1Label = Ti.UI.createLabel({
+			text: 'App ',
+			font: Config.head2,
+			color: Config.color1,
+			height: 'auto',
+			//width : Ti.UI.FILL,
+			top: '0dp',
+			right: '83dp',
+			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+			touchEnabled: false
+		});
+
+		var head2Label = Ti.UI.createLabel({
+			text: 'Music',
+			font: Config.head2,
+			color: Config.white,
+			height: 'auto',
+			//width : 'auto',
+			top: '0dp',
+			right: '0dp',
+			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+			touchEnabled: false
+		});
+
+
+
+		boxTitle.add(pic);
+		boxTitle.add(head1Label);
+		boxTitle.add(head2Label);
+		boxTop.add(boxTitle);
+
+		/* Llamada a API iTunnes */
+		for (var w in work) {
+			work[w].show();
+		}
+		var params = {
+		};
+		xhr.apiItunnes(setListMusic, params);
+		
+
+		
+		scroll1.add(boxTop);
+		scroll1.add(boxBottom);
+
+		
+
+		//TODO
+		if (Config.modeURL == 0)
+			content.add(boxDesa);
+		content.add(scroll1);
+		//content.add(boxBottom);
+
+		work.push(mask1);
+		work.push(myLoginIndicator);
+		content.add(mask1);
+		content.add(myLoginIndicator);
+
+		self.add(content);
+
+	}
+
+	function getUrl() {
+		for (var w in work) {
+			work[w].show();
+		}
+		xhr.authurl(gotUrl);
+	}
+
+	function setListMusic(data)
+	{
+	
+
+		
+		var rows = [];
+		tvListMusic.removeAllChildren();
+		if (data.resultCount == 0) {
+			tvListMusic.setHeight('0dp');
+		}
+		else
+		{
+			tvListMusic.setHeight(Ti.UI.FILL);
+
+			for (var i = 0; i < data.results.length && i <= 20; i++) {
+				Ti.API.info('result:', data.results[i]);
+				var rowBoxOrange = Ti.UI.createView({
+					backgroundColor: Config.colorPrimario2,
+					height: Config.heightRowBoxOrange,
+					width: '4dp',
+					rippleColor: Config.white,
+					touchEnabled: false,
+					left: '0dp'
+				});
+
+				var contentDepto = Ti.UI.createTableViewRow({
+					width: Ti.UI.FILL,
+					height: '70dp',
+					touchEnabled: true,
+					ind: i,
+					id: data.results[i].trackId,
+					backgroundSelectedColor: Config.white,
+					opacity: 0.07
+				});
+
+				var labelDepto = Ti.UI.createLabel({
+					font: {
+						fontSize: '16dp',
+						fontWeight: 'bold'
+					},
+					width: '280dp',
+					ellipsize: Ti.UI.TEXT_ELLIPSIZE_TRUNCATE_MARQUEE,
+					color: Config.white,
+					height: '20dp',
+					left: '19dp',
+					touchEnabled: false,
+					text: data.results[i].artistName + ' - ' + data.results[i].trackName
+				});
+
+				var separatorDepto = Ti.UI.createView({
+					height: '1dp',
+					width: Ti.UI.FILL,
+					backgroundColor: Config.colorBar,
+					bottom: '0dp',
+					touchEnabled: false
+				});
+
+				var rowImage = Ti.UI.createImageView({
+					image: '/images/ic_navigate_next_w.png',
+					height: '36dp',
+					width: '36dp',
+					right: '19dp',
+					touchEnabled: false
+				});
+
+				// contentDepto.addEventListener('click', function (e) {
+				// 	if (clicking == false) {
+				// 		clicking = true;
+				// 		for (var w in work) {
+				// 			work[w].show();
+				// 		}
+				// 		indexID = e.source.ind;
+				// 		flagDepartamentoInputUC = 1;
+				// 		inputSearch.value = e.source.depto;
+				// 		flagAutocomplete = 1;
+				// 		//ripple.effect(e);
+				// 		filtrarUC();
+				// 		finish();
+				// 		clicking = false;
+				// 	}
+				// });
+
+				contentDepto.add(rowBoxOrange);
+				contentDepto.add(labelDepto);
+				contentDepto.add(separatorDepto);
+				contentDepto.add(rowImage);
+				rows.push(contentDepto);
+				//i++;
+
+			}
+			tvListMusic.data = rows;
+			boxBottom.add(tvListMusic);
+		}
+		for (var w in work) {
+			work[w].hide();
+		}
+
+	}
+
+	function gotUrl(result) {
+
+		if (result == false) {
+
+			for (var w in work) {
+				work[w].hide();
+			}
+
+			var dialog = Ti.UI.createAlertDialog({
+				title: L('login_dialog1Title'),
+				message: L('login_dialog1Message'),
+				ok: L('login_dialog1Ok')
+			});
+			dialog.show();
+
+		} else {
+
+			switch (result.status.code) {
+
+				case '200':
+
+					// var Window = require('/ui/Authorize');
+					// new Window(nav, login, result.response.data.url);
+					for (var w in work) {
+						work[w].hide();
+					}
+					Ti.Platform.openURL(result.response.data.url);
+					break;
+
+				case '500':
+
+					for (var w in work) {
+						work[w].hide();
+					}
+
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog2Title'),
+						message: L('login_dialog2Message'),
+						ok: L('login_dialog2Ok')
+					});
+					dialog.show();
+					break;
+
+				default:
+
+					for (var w in work) {
+						work[w].hide();
+					}
+
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog5Title'),
+						message: L('login_dialog5Message'),
+						ok: L('login_dialog5Ok')
+					});
+					dialog.show();
+					break;
+
+			}
+		}
+	}
+
+	function validaRut(rutCompleto) {
+
+		Ti.API.info('rutCompleto: ', rutCompleto);
+
+		if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto))
+			return false;
+		var tmp = rutCompleto.split('-');
+		var digv = tmp[1];
+		var rut = tmp[0];
+
+		if (digv == '1') {
+			digv = 'k';
+			return (validaDv(rut) == digv) || (validaDv(rut) == '1');
+		} else
+			return (validaDv(rut) == digv);
+	}
+
+	function validaDv(T) {
+		var M = 0,
+			S = 1;
+		for (; T; T = Math.floor(T / 10))
+			S = (S + T % 10 * (9 - M++ % 6)) % 11;
+
+		return S ? S - 1 : 'k';
+	}
+
+	function fechaHoy() {
+		var selectedDate = new Date();
+		var dia = '';
+		var mes = '';
+		var ano = '';
+
+		var mes_int = selectedDate.getMonth() + 1;
+		if (selectedDate.getDay() < 10) {
+			dia = '0' + selectedDate.getDay();
+		} else {
+			dia = selectedDate.getDay();
+		}
+		if (mes_int < 10) {
+			mes = '0' + mes_int;
+		} else {
+			mes = mes_int;
+		}
+
+		ano = selectedDate.getFullYear();
+
+		var hora = selectedDate.getHours();
+		var minu = selectedDate.getMinutes();
+		var sec = selectedDate.getSeconds();
+
+		var fechaHoy = ano + "-" + mes + "-" + dia + " " + hora + ":" + minu + ":" + sec;
+		Ti.API.info('Fecha HOY:', fechaHoy);
+		return fechaHoy;
+
+	}
+
+	function postLogin() {
+		userInput.value = "";
+		passInput.value = "";
+		for (var w in work) {
+			work[w].hide();
+		}
+	}
+
+	function loginResponse(result) {
+		
+		/*
+		Config.tracker.addEvent({
+			category: trackerName,
+			action: 'Login google',
+			label: 'Evaluando',
+			value: 1
+		});
+		*/
+		if (result == false) {
+
+			for (var w in work) {
+				work[w].hide();
+			}
+
+			var dialog = Ti.UI.createAlertDialog({
+				title: L('login_dialog1Title'),
+				message: L('login_dialog1Message'),
+				ok: L('login_dialog1Ok')
+			});
+			dialog.show();
+
+		} else {
+
+
+
+			switch (result.status.code) {
+
+				case '200':
+					Ti.App.Properties.setString('fhora_entrada', fechaHoy());
+					Ti.App.Properties.setString('me', result.response.data.session_token);
+					Ti.App.Properties.setString('perfil', result.response.data.profile_type);
+					Ti.App.Properties.setString('name', result.response.data.name);
+					Ti.App.Properties.setString('last_name', result.response.data.last_name);
+					Ti.App.Properties.setString('phone', result.response.data.phone);
+					Ti.App.Properties.setString('email', result.response.data.email);
+					Ti.App.Properties.setString('name_perfil', result.response.data.name_perfil);
+					Ti.App.Properties.setInt('first_login', result.response.data.first_login);
+					Ti.App.Properties.setString('id_user', result.response.data.id_user);
+					Ti.App.Properties.setString('id_photo', result.response.data.id_photo);
+					Ti.App.Properties.setBool('flagAC', result.response.data.flagAC);
+
+					if (result.response.data.first_login == 1) {
+
+						var Window = require('/ui/firstLogin');
+						new Window(null, 0, null, postLogin);
+						if (Config.isAndroid) {
+							////Config.tracker.endSession();
+							//Config.ga.dispatch();
+							//TODO: Se comenta para cambio de sesión
+							//self.close();
+
+						} else {
+							////Config.tracker.endSession();
+							//Config.ga.dispatch();
+							nav.close();
+						}
+					} else {
+						//if (result.response.data.id_photo != null && result.response.data.id_photo != '')
+						Ti.App.Properties.setString('id_photo', result.response.data.id_photo);
+						//else
+						//	Ti.App.Properties.setString('id_photo', null);
+
+						var Window = require('/ui/p_propietario/Menu');
+						new Window(postLogin);
+						if (Config.isAndroid) {
+							////Config.tracker.endSession();
+							//Config.ga.dispatch();
+							//TODO: Se comenta para cambio de sesión
+							//self.close();
+
+						} else {
+							////Config.tracker.endSession();
+							//Config.ga.dispatch();
+							nav.close();
+						}
+
+					}
+
+					break;
+
+				case '401':
+
+					for (var w in work) {
+						work[w].hide();
+					}
+
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog3Title'),
+						message: L('login_dialog3Message'),
+						ok: L('login_dialog3Ok')
+					});
+					dialog.show();
+					break;
+				case '406':
+
+					for (var w in work) {
+						work[w].hide();
+					}
+
+					var dialog = Ti.UI.createAlertDialog({
+						title: 'Login',
+						message: 'Usuario no existe en nuestro sistema. Favor contacte con el administrador.',
+						ok: L('login_dialog3Ok')
+					});
+					dialog.show();
+					break;
+				case '402':
+
+					for (var w in work) {
+						work[w].hide();
+					}
+
+					var dialog = Ti.UI.createAlertDialog({
+						title: 'Login',
+						message: 'Contraseña incorrecta, favor intente nuevamente.',
+						ok: L('login_dialog3Ok')
+					});
+					dialog.show();
+					break;
+				default:
+
+					for (var w in work) {
+						work[w].hide();
+					}
+
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog2Title'),
+						message: L('login_dialog2Message'),
+						ok: L('login_dialog2Ok')
+					});
+					dialog.show();
+					break;
+
+			}
+
+		}
+
+	}
+
+	var flagLoginGoogle = false;
+
+	function authorize() {
+
+		if ((userInput.value == "" || passInput.value == "") && flagLoginGoogle == false) {
+
+			for (var w in work) {
+				work[w].hide();
+			}
+
+			var dialog = Ti.UI.createAlertDialog({
+				title: L('login_dialog4Title'),
+				message: L('login_dialog4Message'),
+				ok: L('login_dialog4Ok')
+			});
+			dialog.show();
+		} else if (flagLoginGoogle == true) {
+			//google.authorize(google.login);
+		} else {
+
+			var params = {
+				email: userInput.value,
+				password: passInput.value,
+				origen: 0
+			};
+			xhr.login(loginResponse, params);
+
+		}
+
+	}
+
+	function finish() {
+		clicking = false;
+	}
+
+	function resume(e) {
+
+		if (Config.mode == 0) {
+			Ti.API.info('resume e: ' + JSON.stringify(e));
+		}
+
+		if (Config.isAndroid && typeof Ti.Android.currentActivity.intent.data != 'undefined')
+			Config.intentData = Ti.Android.currentActivity.intent.data;
+
+		if (!Config.isAndroid && typeof Ti.App.getArguments().url != 'undefined')
+			Config.intentData = Ti.App.getArguments().url;
+
+		if (Config.intentData != null) {
+
+			if (Config.mode == 0) {
+				Ti.API.info(JSON.stringify(Config.intentData));
+				Ti.API.info(Config.intentData.split('login?')[1].split('=')[0]);
+			}
+
+			setTimeout(function (e) {
+
+				if (Config.intentData.split('login?')[1].split('=')[0] == 'error') {
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog5Title'),
+						message: L('login_dialog5Message'),
+						ok: L('login_dialog5Ok')
+					});
+					dialog.show();
+				}
+
+				if (Config.intentData.split('login?')[1].split('=')[0] == 'invalid_mail') {
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog6Title'),
+						message: L('login_dialog6Message'),
+						ok: L('login_dialog6Ok')
+					});
+					dialog.show();
+				}
+
+				if (Config.intentData.split('login?')[1].split('=')[0] == 'invalid_mail_domain') {
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog7Title'),
+						message: L('login_dialog7Message'),
+						ok: L('login_dialog7Ok')
+					});
+					dialog.show();
+				}
+
+				if (Config.intentData.split('login?')[1].split('=')[0] == 'old_token') {
+					var dialog = Ti.UI.createAlertDialog({
+						title: L('login_dialog8Title'),
+						message: L('login_dialog8Message'),
+						ok: L('login_dialog8Ok')
+					});
+					dialog.show();
+				}
+
+				if (Config.intentData.split('login?')[1].split('=')[0] == 'email') {
+
+		
+					var params = {
+						email: Config.intentData.split('email=')[1].split('&')[0],
+						code: Config.intentData.split('code=')[1].split('&')[0],
+						origen: 1
+					};
+					xhr.login(loginResponse, params);
+
+				}
+
+			}, 500);
+
+		}
+
+	}
+
+	construct();
+	resume();
+
+	Ti.App.addEventListener('resumed', resume);
+	Ti.App.addEventListener('handleurl', resume);
+
+	var flagsetHeightContentIni = true;
+	var heighContentIni;
+	var widthContentIni;
+
+	var flagClose = false;
+
+	self.addEventListener('postlayout', function (e) {
+
+		if (flagsetHeightContentIni == true) {
+			heighContentIni = content.getRect().height;
+			widthContentIni = content.getRect().width;
+			flagsetHeightContentIni = false;
+		}
+		var heightContentActual = content.getRect().height;
+
+		if (heightContentActual == heighContentIni) {
+
+		} else {
+			scroll1.setBottom('0dp');
+		}
+
+	});
+
+	if (Config.isAndroid) {
+		self.open();
+	} else {
+		nav.open();
+	}
+
+	function hideSoftKeyboard() {
+		if (Config.isAndroid) {
+			Ti.UI.Android.hideSoftKeyboard();
+		} else {
+			//comentarioText.blur();
+			// myGoalsContainer.name.blur();
+			// myGoalsContainer.telephone.blur();
+		}
+	}
+
+}
+
+module.exports = mainApp;

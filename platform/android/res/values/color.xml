@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_tab_selected">#E15151</color>
+    <color name="text_tab_unselected">#8F8F8F</color>
+    <color name="edit_text_hint">#ECECEC</color>
+    <color name="blackcolor">#000000</color>
+    <color name="whitecolor">#FFFFFF</color>
+    <color name="background">#2E415A</color>
+    <color name="transparent">#00000000</color>
+</resources>

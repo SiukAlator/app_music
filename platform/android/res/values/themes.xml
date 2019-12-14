@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+	<style name="Light" parent="Theme.AppCompat.Light.NoActionBar"/>
+	<style name="Dark" parent="Theme.AppCompat.NoActionBar"/>
+	<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+		<item name="android:statusBarColor">#2E415A</item>
+		<item name="colorControlNormal">#000000</item>
+		<item name="android:navigationBarColor">#000000</item>
+	</style>
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:statusBarColor">#2E415A</item>
+		<item name="colorControlNormal">#000000</item>
+		<item name="android:navigationBarColor">#000000</item>
+    </style>
+</resources>

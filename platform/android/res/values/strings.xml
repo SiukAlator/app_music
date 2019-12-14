@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <! -- Present in all applications -->
+    <string name="google_app_id" translatable="false">1:250513612644:android:d4e829e576b3adbc</string>
+    <! -- Present in applications with the appropriate services configured -->
+    <string name="gcm_defaultSenderId" translatable="false">1:250513612644:android:d4e829e576b3adbc</string>
+	<string name="default_web_client_id" translatable="false">250513612644-t465v6rdt8r5vr4mne9od0vjmj11unj6.apps.googleusercontent.com</string>
+	<string name="firebase_database_url" translatable="false">https://striking-splice-233700.firebaseio.com</string>
+	<string name="google_api_key" translatable="false">AIzaSyDIKkpUvgkGB89hyizmsYA_NrD1sylQgsU</string>
+	<string name="google_crash_reporting_api_key" translatable="false">AIzaSyDIKkpUvgkGB89hyizmsYA_NrD1sylQgsU</string>
+	<string name="project_id" translatable="false">striking-splice-233700</string>
+</resources>

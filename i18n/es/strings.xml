@@ -1,0 +1,222 @@
+<resources>
+	 <string name="MQ_dialogSesion">Compruebe que no haya iniciado sesión en otro telefono. La aplicación se cerrará automáticamente para que vuelva a iniciar sesión.</string>
+	
+	<!-- Login -->
+    <string name="login_title" id="login_title">Iniciar sesión</string>
+    <string name="login_head1Label">INGRESA TUS</string>
+    <string name="login_head2Label">DATOS</string>
+    <string name="login_userInput">USUARIO</string>
+    <string name="login_passInput">CONTRASEÑA</string>
+    <string name="login_buttonLabel">INGRESAR</string>
+    <string name="login_googleLabel">Iniciar sesión con Google</string>
+    <string name="login_bottomLabel">¿Olvidaste tu clave?</string>
+    <string name="login_dialog1Title">Revise su conexión a Internet</string>
+    <string name="login_dialog1Message">no hemos podido comunicarnos con el servidor, por favor compruebe que está conectado a internet.</string>
+    <string name="login_dialog1Ok">CERRAR</string>
+    <string name="login_dialog2Title">Error interno</string>
+    <string name="login_dialog2Message">por favor inténtelo nuevamente en unos minutos o contáctese con el administrador del sistema.</string>
+    <string name="login_dialog2Ok">CERRAR</string>
+    <string name="login_dialog3Title">Error en iniciar sesión</string>
+    <string name="login_dialog3Message">Compruebe que su usuario y contraseña sean correctos y vuelva a intentarlo</string>
+    <string name="login_dialog3Ok">CERRAR</string>
+    <string name="login_dialog4Title">Error en iniciar sesión</string>
+    <string name="login_dialog4Message">Debe ingresar todos los campos</string>
+    <string name="login_dialog4Ok">CERRAR</string>
+    <string name="login_dialog5Title">Error inesperado</string>
+    <string name="login_dialog5Message">por favor inténtelo nuevamente en unos minutos o contáctese con el administrador del sistema.</string>
+    <string name="login_dialog5Ok">CERRAR</string>
+    <string name="login_dialog6Title">Usuario no encontrado</string>
+    <string name="login_dialog6Message">por favor inténtelo nuevamente con un correo registrado.</string>
+    <string name="login_dialog6Ok">CERRAR</string>
+    <string name="login_dialog7Title">Correo inválido</string>
+    <string name="login_dialog7Message">asegurese que el email se encuentre registrado y escrito de forma correcta.</string>
+    <string name="login_dialog7Ok">CERRAR</string>
+    <string name="login_dialog8Title">Sesión exirada</string>
+    <string name="login_dialog8Message">su acceso a expirado, favor ingrese nuevamente.</string>
+    <string name="login_dialog8Ok">CERRAR</string>
+    
+    <!-- SwitchProject -->
+    <string name="SwitchProject_titleHead">Seleccione Proyecto</string>
+    <string name="SwitchProject_proyectoLabel">Proyecto</string>
+    <string name="SwitchProject_seleccionarLabel">Seleccionar</string>
+    <string name="SwitchProject_s_planificacionLabel">Planificación</string>
+    <string name="SwitchProject_buttonNames1">Cerrar</string>
+    <string name="SwitchProject_buttonNames2">Cancelar</string>
+    <string name="SwitchProject_Message">¿Seguro que quiere cerrar su sesión y salir?</string>
+    <string name="SwitchProject_Title">Seleccionar área</string>
+    <string name="SwitchProject_dialog2Title">Seleccionar área</string>
+    <string name="SwitchProject_dialog2Message">por favor inténtelo nuevamente en unos minutos o contáctese con el administrador del sistema.</string>
+    <string name="SwitchProject_dialog2Ok">CERRAR</string>
+    <string name="SwitchProject_dialog3Title">Error en iniciar sesión</string>
+    <string name="SwitchProject_dialog3Message">Compruebe que su usuario y contraseña sean correctos y vuelva a intentarlo</string>
+    <string name="SwitchProject_dialog3Ok">CERRAR</string>
+    <string name="SwitchProject_bottomLabel">¿Olvidaste tu clave?</string>
+    <string name="SwitchProject_dialog1Title">Revise su conexión a Internet</string>
+    <string name="SwitchProject_dialog1Message">no hemos podido comunicarnos con el servidor, por favor compruebe que está conectado a internet.</string>
+    <string name="SwitchProject_dialog4Title">Seleccionar área</string>
+    <string name="SwitchProject_dialog4Message">Debe seleccionar un área.</string>
+    <string name="SwitchProject_dialog4Ok">CERRAR</string>
+    
+    <!-- Planning -->
+    <string name="Planning_titleHead">Planificación</string>
+    <string name="Planning_labelTitleIni">Fecha</string>
+    <string name="Planning_labelTitleFin">Fecha Fin</string>
+    <string name="Planning_labelSemanal">Semanal</string>
+    <string name="Planning_labelResp1">Responsable</string>
+    <string name="Planning_labelEmp1">Empresa</string>
+    <string name="Planning_labelDia">Día</string>
+    <string name="Planning_dialog1Title">Planificación</string>
+    <string name="Planning_dialog1Message">No existe planificación para este proyecto.</string>
+    <string name="Planning_dialog1Ok">Ok</string>
+    <string name="Planning_dialog2Title">Planificación</string>
+    <string name="Planning_dialog2Message">Planificación no encontrada para el filtro aplicado.</string>
+    <string name="Planning_dialog2Ok">Ok</string>
+    <string name="Planning_dialog3Title">Planificación</string>
+    <string name="Planning_dialog3Message">El departamento ingresado no existe.</string>
+    <string name="Planning_dialog3Ok">Ok</string>
+    <string name="Planning_dialog4Title">Planificación</string>
+    <string name="Planning_dialog4Message">No existen resultados para el filtro seleccionado.</string>
+    <string name="Planning_dialog4Ok">Ok</string>
+    
+    <!-- Tracing -->
+    <string name="Tracing_titleHead">Seleccionar seguimiento</string>
+    <string name="Tracing_filterAll_1">Todos</string>
+    <string name="Tracing_filterAll_2">Todas</string>
+    <string name="Tracing_Buscar">Buscar</string>
+    <string name="Tracing_Responsable">Responsable</string>
+    <string name="Tracing_dialog1Title">Error en hacer seguimiento</string>
+    <string name="Tracing_dialog1Message">Debe seleccionar al menos una partida</string>
+    <string name="Tracing_dialog1Ok">CERRAR</string>
+    <string name="Tracing_dialog2Title">Error en hacer seguimiento</string>
+    <string name="Tracing_dialog2Message">Debe seleccionar al menos un estado de calidad</string>
+    <string name="Tracing_dialog2Ok">CERRAR</string>
+    <string name="Tracing_dialog3Title">Error en hacer seguimiento</string>
+    <string name="Tracing_dialog3Message">Debe seleccionar al menos un responsable</string>
+    <string name="Tracing_dialog3Ok">CERRAR</string>
+    <string name="Tracing_Partida">Partida</string>
+    <string name="Tracing_Calidad">Calidad</string>
+    <string name="Tracing_NOOK">NO OK</string>
+    <string name="Tracing_OK">OK</string>
+    <string name="Tracing_Filtrar">FILTRAR</string>
+    <string name="Tracing_UnidadDeControl">   Unidad  \nde control</string>
+    <string name="Tracing_dialog5Message">Debe seleccionar al menos una unidad de control</string>
+    <string name="Tracing_dialog4Title">Seguimiento</string>
+    <string name="Tracing_dialog4Message">Debe seleccionar una partida válida</string>
+    <string name="Tracing_dialog4Ok">Ok</string>
+    <string name="Tracing_dialog5Title">Seguimiento</string>
+    <string name="Tracing_dialog51Message">El </string>
+    <string name="Tracing_dialog52Message"> no existe </string>
+    <string name="Tracing_dialog5Ok">Ok</string>
+    
+    <!-- TracingUC -->
+    <string name="TracingUC_Ocultar">Ocultar</string>
+    <string name="TracingUC_Partidas100">partidas 100%</string>
+    <string name="TracingUC_SeleccionarAvance">Seleccionar avance</string>
+    
+    <!-- NewUser -->
+    <string name="NewUser_Title">Ingresa tus datos</string>
+    <string name="NewUser_Nombre">Nombre</string>
+    <string name="NewUser_Apellido">Apellido</string>
+    <string name="NewUser_Telefono">Telefono</string>
+    <string name="NewUser_Email">Email</string>
+    <string name="NewUser_Proyectos">Proyectos</string>
+    <string name="NewUser_Adjuntar">Adjuntar</string>
+    <string name="NewUser_Imagen">imagen</string>
+    <string name="NewUser_Confirmar">CONFIRMAR</string>
+    <string name="NewUser_Todos">Todos</string>
+    <string name="NewUser_buttonNames11">Confirmar</string>
+    <string name="NewUser_buttonNames12">Cancelar</string>
+    <string name="NewUser_message1">Hay datos vacíos, ¿Está seguro que desea continuar?</string>
+    <string name="NewUser_title1">Campos vacíos</string>
+    <string name="NewUser_message2">el máximo de imágenes para adjuntar es de </string>
+    <string name="NewUser_title2">Máximo de imágenes</string>
+    <string name="NewUser_ok2">CERRAR</string>
+    <string name="NewUser_TomarFoto">Tomar\n  foto</string>
+    <string name="NewUser_Galeria">Galeria</string>
+    <string name="NewUser_Eliminar">Eliminar</string>
+
+	<!-- detallePartida-->
+	<string name="detallePartida_dialog1Title">Detalle partida</string>
+    <string name="detallePartida_dialog1Message">Esta galeria no es compatible para esta aplicación</string>
+    <string name="detallePartida_dialog1Ok">CERRAR</string>
+    <string name="detallePartida_avance">Avance</string>
+    <string name="detallePartida_calidadOK">Calidad OK</string>
+    <string name="detallePartida_guardar">GUARDAR</string>
+    <string name="detallePartida_dialog2Title">Máximo de imágenes</string>
+    <string name="detallePartida_dialog2Message">el máximo de imágenes para adjuntar es de </string>
+    <string name="detallePartida_dialog2Ok">CERRAR</string>
+    <string name="detallePartida_TomarFoto">Tomar\n  foto</string>
+    <string name="detallePartida_SeleccionarAvance">Seleccionar avance</string>
+    <string name="detallePartida_semanal">semanal</string>
+    <string name="detallePartida_adjuntar">Adjuntar</string>
+    <string name="detallePartida_eliminar">Eliminar</string>
+    <string name="detallePartida_cambiar">Cambiar</string>
+    <string name="detallePartida_imagen">imagen</string>
+    <string name="detallePartida_comentario">Comentario</string>
+    
+    
+    <!-- Menu-->
+	<string name="Menu_dialog1Title">Cerrar aplicación</string>
+    <string name="Menu_dialog1Message">¿Seguro que quiere salir?</string>
+    <string name="Menu_dialog1Ok">Cerrar</string>
+    <string name="Menu_dialog1Cancelar">Cancelar</string>
+    <string name="Menu_dialog2Ok">Cerrar</string>
+    <string name="Menu_dialog2Cancelar">Cancelar</string>
+    <string name="Menu_dialog2Message">¿Seguro que quiere cerrar su sesión y salir?</string>
+    <string name="Menu_dialog2Title">Cerrar sesión</string>
+
+    <!-- SideMenu-->
+	<string name="SideMenu_proyectoLabel">Proyecto</string>
+	<string name="SideMenu_cambiarArea">Cambiar área</string>
+	<string name="SideMenu_cerrarSesion">Cerrar sesión</string>
+	<string name="SideMenu_perfilP">PROFESIONAL DE TERRENO</string>
+    <string name="SideMenu_perfilR">RESPONSABLE</string>
+	
+	<!-- PlanningFilters-->
+	<string name="PlanningFilters_dialog1Title">Error interno</string>
+    <string name="PlanningFilters_dialog1Message">por favor inténtelo nuevamente en unos minutos o contáctese con el administrador del sistema.</string>
+    <string name="PlanningFilters_dialog1Ok">CERRAR</string>
+    <string name="PlanningFilters_dialog2Title">Revise su conexión a Internet</string>
+    <string name="PlanningFilters_dialog2Message">no hemos podido comunicarnos con el servidor, por favor compruebe que está conectado a internet.</string>
+    <string name="PlanningFilters_dialog2Ok">CERRAR</string>
+    <string name="PlanningFilters_dialog3Ok">Cerrar</string>
+    <string name="PlanningFilters_dialog3Cancelar">Cancelar</string>
+    <string name="PlanningFilters_dialog3Message">¿Seguro que quiere cerrar su sesión y salir?</string>
+    <string name="PlanningFilters_dialog3Title">Cerrar sesión</string>
+    <string name="PlanningFilters_title">Filtros planificación</string>
+    <string name="PlanningFilters_labelDepto">Departamento</string>
+    <string name="PlanningFilters_hintTextAll1">Todos</string>
+    <string name="PlanningFilters_hintTextAll2">Todas</string>
+    <string name="PlanningFilters_labelPartida">Partida</string>
+    <string name="PlanningFilters_labelResponsable">Responsable</string>
+    <string name="PlanningFilters_DayOfWeek">Día de la semana</string>
+    <string name="PlanningFilters_ButtonFiltrar">FILTRAR</string>
+    <string name="PlanningFilters_dialog4Ok">Ok</string>
+    <string name="PlanningFilters_dialog4Message">La partida ingresada no es válida</string>
+    <string name="PlanningFilters_dialog4Title">Filtros planificación</string>
+    
+    <!-- Home -->
+    <string name="Home_head">Resumen de avance</string>
+    <string name="Home_labelGraphicAP">Acumulado programado</string>
+    <string name="Home_labelGraphicAR">Acumulado real</string>
+    <string name="Home_labelGraphicTP">Término programado</string>
+    <string name="Home_labelGraphicTE">Término estimado</string>
+    <string name="Home_labelGraphicAtraso">Atraso</string>
+    <string name="Home_labelGraphicAdelanto">Adelanto</string>
+    <string name="Home_labelGraphicDias">días</string>
+    <string name="Home_labelProgramado">Planificado</string>
+    <string name="Home_labelReal">Real</string>
+    <string name="Home_labelGeneral">General</string>
+    <string name="Home_labelSemanal">Semanal</string>
+    <string name="Home_dialog1Title">Dashboard</string>
+    <string name="Home_dialog1Message">no hemos podido actualizar el dashboard, favor verifique su conexión a internet. Última actualización: </string>
+    <string name="Home_dialog1Ok">Ok</string>
+    <string name="Home_dialog2Title">Error interno</string>
+    <string name="Home_dialog2Message">no hemos podido actualizar el dashboard, favor intente nuevamente o contactese con el administrador. Última actualización: </string>
+    <string name="Home_dialog2Ok">Ok</string>
+    <string name="Home_dialog3Title">Dashboard</string>
+    <string name="Home_dialog31Message">No existe Planificación </string>
+    <string name="Home_dialog32Message"> para este proyecto</string>
+    <string name="Home_dialog3Ok">Ok</string>
+    <string name="Home_dialog4Message">no hemos podido actualizar el dashboard, favor intente nuevamente o contactese con el administrador.</string>
+</resources>
