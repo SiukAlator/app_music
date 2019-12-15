@@ -28,6 +28,7 @@ function mainApp() {
 	var arrayStartPauseButton = [];
 	var openViewMusic = false;
 	var idAlbum = '';
+	var flagFromLastSong = false;
 
 	var listMusic;
 	var webviewMain;
@@ -111,6 +112,15 @@ function mainApp() {
 
 	});
 
+	var viewLastSong = Ti.UI.createScrollView({
+		// backgroundColor: Config.red,
+		top: '0dp',
+		layout: 'vertical',
+		height: Ti.UI.FILL,
+		width: Ti.UI.FILL,
+
+	});
+
 	function construct() {
 
 		inputSearch = Ti.UI.createTextField({
@@ -144,7 +154,7 @@ function mainApp() {
 			flagDepartamentoInputUC = 0;
 			callApi(pattern);
 			hideSoftKeyboard();
-
+			boxBottom.scrollToView(0);
 
 		});
 
@@ -155,15 +165,26 @@ function mainApp() {
 		});
 
 		var boxSearch = Ti.UI.createView({
-			borderColor: Config.colorBar,
+			borderColor: Config.white,
 			borderRadius: Config.bigborderRadius,
 			backgroundColor: Config.colorWallpaper1,
 			borderWidth: '1dp',
 			top: '10dp',
 			height: '50dp',
-			left: Config.marginViewSeguimiento,
-			right: Config.marginViewSeguimiento,
+			// left: Config.marginViewSeguimiento,
+			// right: Config.marginViewSeguimiento,
+			left: '20dp',
+			width: '280dp',
 			bubbleParent: false
+		});
+
+		var iconList = Ti.UI.createImageView({
+			image: '/images/192_list.png',
+			height: '30dp',
+			width: '30dp',
+			right: '20dp',
+			top: '20dp',
+			backgroundSelectedColor: Config.whiteEffect
 		});
 
 
@@ -267,11 +288,19 @@ function mainApp() {
 			/*idSelector = 0 para body UC*/
 			callApi(pattern);
 			hideSoftKeyboard();
+			boxBottom.scrollToView(0);
+		});
+
+		iconList.addEventListener('click', function (e) {
+			silenceAll();
+			setLastSong();
+			boxBottom.scrollToView(2);
 		});
 
 		boxSearch.add(inputSearch);
 		boxSearch.add(iconSearch);
 		boxTop.add(boxSearch);
+		boxTop.add(iconList);
 
 
 
@@ -285,11 +314,11 @@ function mainApp() {
 			height: Ti.UI.FILL,
 			showPagingControl: false,
 			scrollingEnabled: false,
-			views: [tvListMusic, openMusic],
+			views: [tvListMusic, openMusic, viewLastSong],
 		});
 
 		scroll1.add(boxBottom);
-
+		setLastSong();
 
 
 		//TODO
@@ -302,16 +331,143 @@ function mainApp() {
 		work.push(myLoginIndicator);
 		content.add(mask1);
 		content.add(myLoginIndicator);
-
+		boxBottom.scrollToView(2);
 		self.add(content);
 
 	}
 
-	function getUrl() {
-		for (var w in work) {
-			work[w].show();
+	function setLastSong()
+	{
+		viewLastSong.removeAllChildren();
+		var dataLastSong = db.selectLASTSONG();
+		Ti.API.info('dataLastSong:', dataLastSong);
+		if (dataLastSong == null || dataLastSong.length == 0)
+		{
+			Ti.API.info('ECHO 0');
+			var labelBienvenida1 = Ti.UI.createLabel({
+				font: {
+					fontSize: '32dp',
+					fontWeight: 'bold'
+				},
+				color: Config.white,
+				touchEnabled: false,
+				top: '100dp',
+				text: 'Bienvenido!\n'
+			});
+			var labelBienvenida2 = Ti.UI.createLabel({
+				font: {
+					fontSize: '18dp',
+					fontWeight: 'bold'
+				},
+				color: Config.white,
+				top: '20dp',
+				textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+				touchEnabled: false,
+				text: 'Favor ingresa el artista o canción\nque deseas escuchar'
+			});
+			viewLastSong.add(labelBienvenida1);
+			viewLastSong.add(labelBienvenida2);
+			
 		}
-		xhr.authurl(gotUrl);
+		else
+		{
+			Ti.API.info('ECHO 1');
+			var labelUB = Ti.UI.createLabel({
+				font: {
+					fontSize: '16dp'
+				},
+				color: Config.white,
+				top: '20dp',
+				left: '20dp',
+				touchEnabled: false,
+				text: 'Últimas busquedas...'
+			});
+
+			viewLastSong.add(labelUB);
+			Ti.API.info('pasooo');
+			// return true;
+
+			for (var i in dataLastSong) {
+				Ti.API.info('result:', dataLastSong[i].values);
+				var rowBoxOrange = Ti.UI.createView({
+					backgroundColor: Config.colorPrimario2,
+					height: Config.heightRowBoxOrange,
+					width: '4dp',
+					rippleColor: Config.white,
+					touchEnabled: false,
+					left: '0dp'
+				});
+
+				var contentDepto = Ti.UI.createView({
+					width: Ti.UI.FILL,
+					height: '70dp',
+					touchEnabled: true,
+					ind: i,
+					data: dataLastSong[i].values,
+					id: dataLastSong[i].values.trackId,
+					backgroundSelectedColor: Config.whiteEffect
+				});
+
+				var labelDepto = Ti.UI.createLabel({
+					font: {
+						fontSize: '16dp',
+						fontWeight: 'bold'
+					},
+					width: '280dp',
+					ellipsize: Ti.UI.TEXT_ELLIPSIZE_TRUNCATE_MARQUEE,
+					color: Config.white,
+					height: '20dp',
+					left: '19dp',
+					touchEnabled: false,
+					text: dataLastSong[i].values.artistName + ' - ' + dataLastSong[i].values.trackName
+				});
+
+				var separatorDepto = Ti.UI.createView({
+					height: '1dp',
+					width: Ti.UI.FILL,
+					backgroundColor: Config.colorBar,
+					bottom: '0dp',
+					touchEnabled: false
+				});
+
+				var rowImage = Ti.UI.createImageView({
+					image: '/images/ic_navigate_next_w.png',
+					height: '36dp',
+					width: '36dp',
+					right: '19dp',
+					touchEnabled: false
+				});
+
+				contentDepto.addEventListener('click', function (e) {
+					if (clicking == false) {
+						clicking = true;
+						for (var w in work) {
+							work[w].show();
+						}
+						setViewMusic(e.source.data);
+						for (var w in work) {
+							work[w].hide();
+						}
+						openViewMusic = true;
+						flagFromLastSong = true;
+						boxBottom.scrollToView(1);
+
+						clicking = false;
+					}
+				});
+
+				
+				contentDepto.add(rowBoxOrange);
+				contentDepto.add(labelDepto);
+				contentDepto.add(separatorDepto);
+				contentDepto.add(rowImage);
+				viewLastSong.add(contentDepto);
+				//i++;
+
+			}
+		}
+		
+		//viewLastSong
 	}
 
 	function callApi(textSearch) {
@@ -327,8 +483,23 @@ function mainApp() {
 
 		var rows = [];
 		tvListMusic.removeAllChildren();
-		if (data.resultCount == 0) {
+		if (data == false)
+		{
+			var dialog = Ti.UI.createAlertDialog({
+				title: L('login_dialog1Title'),
+				message: L('login_dialog1Message'),
+				ok: L('login_dialog5Ok')
+			});
+			dialog.show();
+		}
+		else if (data.resultCount == 0) {
 			tvListMusic.setHeight('0dp');
+			var dialog = Ti.UI.createAlertDialog({
+				title: 'App Music',
+				message: 'No se encontraron resultados en su busqueda, intente nuevamente.',
+				ok: L('login_dialog5Ok')
+			});
+			dialog.show();
 		}
 		else {
 			tvListMusic.setHeight(Ti.UI.FILL);
@@ -351,7 +522,7 @@ function mainApp() {
 					ind: i,
 					data: data.results[i],
 					id: data.results[i].trackId,
-					backgroundSelectedColor: Config.white,
+					backgroundSelectedColor: Config.whiteEffect,
 					opacity: 0.07
 				});
 
@@ -392,6 +563,7 @@ function mainApp() {
 							work[w].show();
 						}
 						Ti.API.info('data:', e.source.data);
+						db.insertLASTSONG( e.source.data);
 						setViewMusic(e.source.data);
 						for (var w in work) {
 							work[w].hide();
@@ -514,16 +686,13 @@ function mainApp() {
 		};
 		xhr.apiItunnes(loadBanda, params);
 
-		Ti.API.info('ECHO 0');
-
-
-
 	}
 
 	function loadBanda(dataIn) {
 		/**Se filtran solo los tracks que correspondan a idAlbum */
 		var data = dataIn.results;
 		var totalDurationFromBackend = 30;
+		var countId = 0;
 		for (var i in data) {
 			if (data[i].collectionId == idAlbum) {
 
@@ -564,13 +733,13 @@ function mainApp() {
 					height: '30dp',
 					left: '0dp',
 					image: '/images/pause.png',
-					id: i
+					id: countId
 				});
 
 				var audioPlayer = Titanium.Media.createAudioPlayer({
 					url: data[i].previewUrl,
 					preload: true,
-					id: i
+					id: countId
 				});
 
 				arrayListRefAudio.push(audioPlayer);
@@ -618,13 +787,13 @@ function mainApp() {
 				contentMusic.add(startPauseButton);
 				contentMusic.add(separatorDepto);
 				pb.show();
-				if (i == 0) {
+				if (countId == 0) {
 					audioPlayer.play();
 				}
 				else {
 					startPauseButton.image = '/images/icon_play.png';
 				}
-
+				countId++;
 				listMusic.add(contentMusic);
 
 			}
@@ -764,14 +933,6 @@ function mainApp() {
 
 	function loginResponse(result) {
 
-		/*
-		Config.tracker.addEvent({
-			category: trackerName,
-			action: 'Login google',
-			label: 'Evaluando',
-			value: 1
-		});
-		*/
 		if (result == false) {
 
 			for (var w in work) {
@@ -903,36 +1064,8 @@ function mainApp() {
 
 	}
 
-	var flagLoginGoogle = false;
 
-	function authorize() {
 
-		if ((userInput.value == "" || passInput.value == "") && flagLoginGoogle == false) {
-
-			for (var w in work) {
-				work[w].hide();
-			}
-
-			var dialog = Ti.UI.createAlertDialog({
-				title: L('login_dialog4Title'),
-				message: L('login_dialog4Message'),
-				ok: L('login_dialog4Ok')
-			});
-			dialog.show();
-		} else if (flagLoginGoogle == true) {
-			//google.authorize(google.login);
-		} else {
-
-			var params = {
-				email: userInput.value,
-				password: passInput.value,
-				origen: 0
-			};
-			xhr.login(loginResponse, params);
-
-		}
-
-	}
 
 	function finish() {
 		clicking = false;
@@ -1014,16 +1147,11 @@ function mainApp() {
 	}
 
 	construct();
-	resume();
+	// resume();
 
-	Ti.App.addEventListener('resumed', resume);
-	Ti.App.addEventListener('handleurl', resume);
 
 	var flagsetHeightContentIni = true;
 	var heighContentIni;
-	var widthContentIni;
-
-	var flagClose = false;
 
 	self.addEventListener('postlayout', function (e) {
 
@@ -1059,17 +1187,28 @@ function mainApp() {
 		}
 		else {
 			openViewMusic = false;
-			for (var j in arrayListRefAudio) {
-				arrayListRefAudio[j].stop();
+			silenceAll();
+			if (flagFromLastSong == true)
+			{
+				flagFromLastSong = false;
+				boxBottom.scrollToView(2);
 			}
-			arrayListRefAudio = [];
-			arrayPbRefAudio = [];
-			arrayStartPauseButton = [];
-			boxBottom.scrollToView(0);
+			else
+				boxBottom.scrollToView(0);
 		}
 
 
 	});
+
+	function silenceAll()
+	{
+		for (var j in arrayListRefAudio) {
+			arrayListRefAudio[j].stop();
+		}
+		arrayListRefAudio = [];
+		arrayPbRefAudio = [];
+		arrayStartPauseButton = [];
+	}
 
 
 	function hideSoftKeyboard() {

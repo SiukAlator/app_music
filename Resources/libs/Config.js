@@ -70,6 +70,7 @@ Config.hintgray = '#c7c7c7';
 Config.somewhite = '#eeeeee';
 Config.almostwhite = '#f7f7f7';
 Config.white = '#ffffff';
+Config.whiteEffect = '#50ffffff';
 
 /*** General ***/
 Config.colorWallpaper1 = '#2E415A';
