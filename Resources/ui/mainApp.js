@@ -23,6 +23,8 @@ function mainApp() {
 			color: Config.titleTextColor
 		}
 	});
+
+	var allDataResultSearch = [];
 	var arrayListRefAudio = [];
 	var arrayPbRefAudio = [];
 	var arrayStartPauseButton = [];
@@ -94,6 +96,7 @@ function mainApp() {
 	var tvListMusic = Ti.UI.createTableView({
 		width: Ti.UI.FILL,
 		height: Ti.UI.FILL,
+		indexNum: 0,
 		top: '0dp',
 		bottom: '10dp',
 		layout: 'vertical',
@@ -101,6 +104,19 @@ function mainApp() {
 		backgroundColor: 'transparent',
 		// backgroundColor: Config.red,
 		separatorStyle: Titanium.UI.TABLE_VIEW_SEPARATOR_STYLE_NONE
+	});
+
+	tvListMusic.addEventListener("scroll", function (e) {
+
+
+		if (Config.isAndroid) {
+			var firstVisibleItemIndex = e.firstVisibleItem;
+			var totalItems = e.totalItemCount;
+			var visibleItemCount = e.visibleItemCount;
+
+			if (clicking == false && parseInt(tvListMusic.indexNum) != allDataResultSearch.length && ((firstVisibleItemIndex + visibleItemCount) >= (totalItems * 0.75)))
+				reloadMoreData();
+		}
 	});
 
 	var openMusic = Ti.UI.createView({
@@ -336,13 +352,11 @@ function mainApp() {
 
 	}
 
-	function setLastSong()
-	{
+	function setLastSong() {
 		viewLastSong.removeAllChildren();
 		var dataLastSong = db.selectLASTSONG();
 		Ti.API.info('dataLastSong:', dataLastSong);
-		if (dataLastSong == null || dataLastSong.length == 0)
-		{
+		if (dataLastSong == null || dataLastSong.length == 0) {
 			Ti.API.info('ECHO 0');
 			var labelBienvenida1 = Ti.UI.createLabel({
 				font: {
@@ -367,10 +381,9 @@ function mainApp() {
 			});
 			viewLastSong.add(labelBienvenida1);
 			viewLastSong.add(labelBienvenida2);
-			
+
 		}
-		else
-		{
+		else {
 			Ti.API.info('ECHO 1');
 			var labelUB = Ti.UI.createLabel({
 				font: {
@@ -456,7 +469,7 @@ function mainApp() {
 					}
 				});
 
-				
+
 				contentDepto.add(rowBoxOrange);
 				contentDepto.add(labelDepto);
 				contentDepto.add(separatorDepto);
@@ -466,7 +479,7 @@ function mainApp() {
 
 			}
 		}
-		
+
 		//viewLastSong
 	}
 
@@ -477,14 +490,116 @@ function mainApp() {
 		};
 		xhr.apiItunnes(setListMusic, params);
 	}
+
+	function reloadMoreData() {
+		var rows = tvListMusic.data;
+		
+		for (var w in work) {
+			work[w].show();
+		}
+		clicking = true;
+		var countBreak = 1;
+		for (var i = tvListMusic.indexNum; i < allDataResultSearch.length; i++) {
+			Ti.API.info('result:', allDataResultSearch[i].trackId);
+			if (countBreak == 20)
+				break;
+			var rowBoxOrange = Ti.UI.createView({
+				backgroundColor: Config.colorPrimario2,
+				height: Config.heightRowBoxOrange,
+				width: '4dp',
+				rippleColor: Config.white,
+				touchEnabled: false,
+				left: '0dp'
+			});
+
+			var contentDepto = Ti.UI.createTableViewRow({
+				width: Ti.UI.FILL,
+				height: '70dp',
+				touchEnabled: true,
+				ind: i,
+				data: allDataResultSearch[i],
+				id: allDataResultSearch[i].trackId,
+				backgroundSelectedColor: Config.whiteEffect,
+				opacity: 0.07
+			});
+
+			var labelDepto = Ti.UI.createLabel({
+				font: {
+					fontSize: '16dp',
+					fontWeight: 'bold'
+				},
+				width: '280dp',
+				ellipsize: Ti.UI.TEXT_ELLIPSIZE_TRUNCATE_MARQUEE,
+				color: Config.white,
+				height: '20dp',
+				left: '19dp',
+				touchEnabled: false,
+				text: allDataResultSearch[i].artistName + ' - ' + allDataResultSearch[i].trackName
+			});
+
+			var separatorDepto = Ti.UI.createView({
+				height: '1dp',
+				width: Ti.UI.FILL,
+				backgroundColor: Config.colorBar,
+				bottom: '0dp',
+				touchEnabled: false
+			});
+
+			var rowImage = Ti.UI.createImageView({
+				image: '/images/ic_navigate_next_w.png',
+				height: '36dp',
+				width: '36dp',
+				right: '19dp',
+				touchEnabled: false
+			});
+
+			contentDepto.addEventListener('click', function (e) {
+				if (clicking == false) {
+					clicking = true;
+					for (var w in work) {
+						work[w].show();
+					}
+					Ti.API.info('data:', e.source.data);
+					db.insertLASTSONG(e.source.data);
+					setViewMusic(e.source.data);
+					for (var w in work) {
+						work[w].hide();
+					}
+					openViewMusic = true;
+
+					boxBottom.scrollToView(1);
+
+					clicking = false;
+				}
+			});
+
+			contentDepto.add(rowBoxOrange);
+			contentDepto.add(labelDepto);
+			contentDepto.add(separatorDepto);
+			contentDepto.add(rowImage);
+			rows.push(contentDepto);
+			tvListMusic.indexNum = i + 1;
+			countBreak ++;
+			//i++;
+
+		}
+		tvListMusic.data = rows;
+		setTimeout(function(){
+			for (var w in work) {
+				work[w].hide();
+			}
+			clicking = false;
+		}, 1000);
+		
+	}
+
 	function setListMusic(data) {
 
 
-
+		allDataResultSearch = [];
 		var rows = [];
 		tvListMusic.removeAllChildren();
-		if (data == false)
-		{
+		if (data == false) {
 			var dialog = Ti.UI.createAlertDialog({
 				title: L('login_dialog1Title'),
 				message: L('login_dialog1Message'),
@@ -503,9 +618,12 @@ function mainApp() {
 		}
 		else {
 			tvListMusic.setHeight(Ti.UI.FILL);
-
-			for (var i = 0; i < data.results.length && i <= 20; i++) {
+			allDataResultSearch = data.results;
+			Ti.API.info('count result:', allDataResultSearch.length);
+			for (var i = tvListMusic.indexNum; i < allDataResultSearch.length; i++) {
 				// Ti.API.info('result:', data.results[i]);
+				if ((i + 1) % 20 == 0)
+					break;
 				var rowBoxOrange = Ti.UI.createView({
 					backgroundColor: Config.colorPrimario2,
 					height: Config.heightRowBoxOrange,
@@ -520,8 +638,8 @@ function mainApp() {
 					height: '70dp',
 					touchEnabled: true,
 					ind: i,
-					data: data.results[i],
-					id: data.results[i].trackId,
+					data: allDataResultSearch[i],
+					id: allDataResultSearch[i].trackId,
 					backgroundSelectedColor: Config.whiteEffect,
 					opacity: 0.07
 				});
@@ -537,7 +655,7 @@ function mainApp() {
 					height: '20dp',
 					left: '19dp',
 					touchEnabled: false,
-					text: data.results[i].artistName + ' - ' + data.results[i].trackName
+					text: allDataResultSearch[i].artistName + ' - ' + allDataResultSearch[i].trackName
 				});
 
 				var separatorDepto = Ti.UI.createView({
@@ -563,7 +681,7 @@ function mainApp() {
 							work[w].show();
 						}
 						Ti.API.info('data:', e.source.data);
-						db.insertLASTSONG( e.source.data);
+						db.insertLASTSONG(e.source.data);
 						setViewMusic(e.source.data);
 						for (var w in work) {
 							work[w].hide();
@@ -581,6 +699,7 @@ function mainApp() {
 				contentDepto.add(separatorDepto);
 				contentDepto.add(rowImage);
 				rows.push(contentDepto);
+				tvListMusic.indexNum = i + 1;
 				//i++;
 
 			}
@@ -1188,8 +1307,7 @@ function mainApp() {
 		else {
 			openViewMusic = false;
 			silenceAll();
-			if (flagFromLastSong == true)
-			{
+			if (flagFromLastSong == true) {
 				flagFromLastSong = false;
 				boxBottom.scrollToView(2);
 			}
@@ -1200,8 +1318,7 @@ function mainApp() {
 
 	});
 
-	function silenceAll()
-	{
+	function silenceAll() {
 		for (var j in arrayListRefAudio) {
 			arrayListRefAudio[j].stop();
 		}
