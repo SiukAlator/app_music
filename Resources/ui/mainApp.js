@@ -1051,16 +1051,14 @@ function mainApp() {
 	self.addEventListener('android:back', function (e) {
 
 		if (openViewMusic == false) {
-			e.cancelBubble = true;
 			if (clicking == false) {
-				clicking = true;
-				ripple.round({
-					source: leftButton
-				});
+				Ti.API.info('ECHO!!!!');
+				self.close();
+
 			}
 		}
 		else {
-			openViewMusic = true;
+			openViewMusic = false;
 			for (var j in arrayListRefAudio) {
 				arrayListRefAudio[j].stop();
 			}
