@@ -23,7 +23,13 @@ function mainApp() {
 			color: Config.titleTextColor
 		}
 	});
-	var audioPlayer;
+	var arrayListRefAudio = [];
+	var arrayPbRefAudio = [];
+	var arrayStartPauseButton = [];
+	var openViewMusic = false;
+	var idAlbum = '';
+
+	var listMusic;
 	var webviewMain;
 
 	// var boxBottom = Ti.UI.createView({
@@ -96,7 +102,7 @@ function mainApp() {
 		separatorStyle: Titanium.UI.TABLE_VIEW_SEPARATOR_STYLE_NONE
 	});
 
-	var openMusic = Ti.UI.createScrollView({
+	var openMusic = Ti.UI.createView({
 		// backgroundColor: Config.red,
 		top: '0dp',
 		layout: 'vertical',
@@ -390,16 +396,10 @@ function mainApp() {
 						for (var w in work) {
 							work[w].hide();
 						}
-
+						openViewMusic = true;
 
 						boxBottom.scrollToView(1);
-						// indexID = e.source.ind;
-						// flagDepartamentoInputUC = 1;
-						// inputSearch.value = e.source.depto;
-						// flagAutocomplete = 1;
-						// //ripple.effect(e);
-						// filtrarUC();
-						// finish();
+
 						clicking = false;
 					}
 				});
@@ -446,6 +446,13 @@ function mainApp() {
 			layout: 'horizontal'
 		});
 
+		var separatorDepto = Ti.UI.createView({
+			height: '1dp',
+			width: Ti.UI.FILL,
+			backgroundColor: Config.colorBar,
+			top: '10dp',
+			touchEnabled: false
+		});
 
 
 		var textAlbum = Ti.UI.createLabel({
@@ -473,191 +480,162 @@ function mainApp() {
 			text: data.collectionName
 		});
 
+
 		contentAlbum.add(textAlbum);
 		contentAlbum.add(titleAlbum);
 
 		var ImageAlbum = Ti.UI.createImageView({
 			image: data.artworkUrl100,
-			height: 'auto',
+			height: '100dp',
 			width: 'auto',
 			top: '20dp'
 		});
 
+		idAlbum = data.collectionId;
 
-		// webviewMain = Ti.UI.createWebView({
-		// 	left: '14dp',
-		// 	right: '14dp',
-		// 	top: '7dp',
-		// 	height: Ti.UI.SIZE,
-		// 	html: data.trackViewUrl,
-		// 	backgroundColor: "yellow"
-		// });
 
-		// var webviewMain = Titanium.Media.createSound({
-		// 	url: data.previewUrl,
-		// 	preload: true,
-		// 	allowBackground: true
-		// });
-		var startPauseButton = Ti.UI.createImageView({
-			width: '50dp',
-			height: '50dp',
-			top: 20,
-			backgroundColor: Config.red,
-			image: '/images/pause.png'
+		listMusic = Ti.UI.createScrollView({
+			// backgroundColor: Config.red,
+			top: '0dp',
+			layout: 'vertical',
+			height: Ti.UI.FILL,
+			width: Ti.UI.FILL,
+
 		});
-
-		// var pauseResumeButton = Ti.UI.createButton({
-		// 	title: 'Click to play sound',
-		// 	width: '200',
-		// 	height: '40',
-		// 	top: 20
-		// });
-
-		// button.addEventListener('click', function () {
-		// 	audioPlayer.play();
-		// });
-
-		// var videoPlayer = Titanium.Media.createVideoPlayer({
-		// 	top: 2,
-		// 	autoplay: true,
-		// 	backgroundColor: 'blue',
-		// 	height: 300,
-		// 	width: 300,
-		// 	mediaControlStyle: Titanium.Media.VIDEO_CONTROL_DEFAULT,
-		// 	scalingMode: Titanium.Media.VIDEO_SCALING_ASPECT_FIT
-		// });
-
-		// videoPlayer.url = data.trackViewUrl;
-
-		var totalDurationFromBackend = 30 // its in your case.Also divided by 1000 
-
-		audioPlayer = Titanium.Media.createAudioPlayer({
-			url: data.previewUrl,
-			preload: true
-		});
-
-		var pb = Titanium.UI.createProgressBar({
-			top: 10,
-			width: 250,
-			height: 'auto',
-			min: 0,
-			max: totalDurationFromBackend,
-			value: 0,
-			color: '#fff',
-			style: Titanium.UI.iPhone.ProgressBarStyle.PLAIN,
-		});
-
-
-		// var params = {
-		// 	collectionId: data.collectionId,
-		// 	trackId: data.trackId
-		// };
-		// xhr.getMusicAlbum(resultados, params);
-
-		// var contentBanda = Ti.UI.createView({
-		// 	height: Ti.UI.SIZE,
-		// 	width: Ti.UI.FILL,
-		// 	top: '20dp',
-		// 	touchEnabled: false,
-		// 	layout: 'horizontal'
-		// });
-
-
-
-		// var textBanda = Ti.UI.createLabel({
-		// 	font: {
-		// 		fontSize: '18dp',
-		// 		fontWeight: 'bold'
-		// 	},
-		// 	width: '280dp',
-		// 	ellipsize: Ti.UI.TEXT_ELLIPSIZE_TRUNCATE_MARQUEE,
-		// 	color: Config.color1,
-		// 	height: '20dp',
-		// 	top: '20dp',
-		// 	touchEnabled: false,
-		// 	text: 'Banda: '
-		// });
-
-		// var titleBanda = Ti.UI.createLabel({
-		// 	font: {
-		// 		fontSize: '16dp',
-		// 		fontWeight: 'bold'
-		// 	},
-		// 	width: '280dp',
-		// 	ellipsize: Ti.UI.TEXT_ELLIPSIZE_TRUNCATE_MARQUEE,
-		// 	color: Config.white,
-		// 	height: '20dp',
-		// 	top: '20dp',
-		// 	touchEnabled: false,
-		// 	text: data.artistName + ' - ' + data.trackName
-		// });
-
-		// contentBanda.add(textBanda);
-		// contentBanda.add(titleBanda);
-
-
-
-
-
-		audioPlayer.addEventListener('progress', function (e) {
-			Ti.API.info('Time Played: ' + Math.round(e.progress) + ' milliseconds');
-
-			// set the progress bar's progress value with current time played.. (milliseconds) 
-			pb.value = Math.round(e.progress / 1000);
-		});
-
-		// pauseResumeButton.addEventListener('click', function () {
-		// 	Ti.API.info('click!');
-		// 	audioPlayer.pause();
-		// });
-
-
 		openMusic.add(titleMusic);
 		openMusic.add(contentAlbum);
 		openMusic.add(ImageAlbum);
-		openMusic.add(audioPlayer);
-		openMusic.add(pb);
-		openMusic.add(startPauseButton);
-		// openMusic.add(pauseResumeButton);
-		pb.show();
-		audioPlayer.play();
+		openMusic.add(separatorDepto);
+		openMusic.add(listMusic);
 
-		startPauseButton.addEventListener('click', function () {
-			Ti.API.info('click!');
-			// When paused, playing returns false.
-			// If both are false, playback is stopped.
-			if (audioPlayer.playing)
-				audioPlayer.pause();
-			else
-				audioPlayer.play();
-			// if (audioPlayer.playing || audioPlayer.paused) {
-			// 	audioPlayer.stop();
-			// 	pauseResumeButton.enabled = false;
-			// 	if (Ti.Platform.name === 'android') {
-			// 		audioPlayer.release();
-			// 	}
-			// }
-			// else {
-			// 	audioPlayer.start();
-			// 	pauseResumeButton.enabled = true;
-			// }
-		});
+
+		var params = {
+			text: data.collectionName
+		};
+		xhr.apiItunnes(loadBanda, params);
+
+		Ti.API.info('ECHO 0');
 
 
 
+	}
 
-		// openMusic.add(button);
-		// openMusic.add(pb);
-		// pb.show();
-		// openMusic.add(contentBanda);
+	function loadBanda(dataIn) {
+		/**Se filtran solo los tracks que correspondan a idAlbum */
+		var data = dataIn.results;
+		var totalDurationFromBackend = 30;
+		for (var i in data) {
+			if (data[i].collectionId == idAlbum) {
+
+				var separatorDepto = Ti.UI.createView({
+					height: '1dp',
+					width: Ti.UI.FILL,
+					backgroundColor: Config.colorBar,
+					bottom: '0dp',
+					touchEnabled: false
+				});
+
+				var contentMusic = Ti.UI.createView({
+					height: '60dp',
+					width: Ti.UI.FILL,
+					top: '20dp',
+					left: '20dp',
+					touchEnabled: false
+				});
 
 
+				var titleMusic = Ti.UI.createLabel({
+					font: {
+						fontSize: '16dp'
+						// fontWeight: 'bold'
+					},
+					width: '280dp',
+					ellipsize: Ti.UI.TEXT_ELLIPSIZE_TRUNCATE_MARQUEE,
+					color: Config.white,
+					height: '20dp',
+					top: '0dp',
+					touchEnabled: false,
+					text: data[i].trackName
+				});
+
+
+				var startPauseButton = Ti.UI.createImageView({
+					width: '30dp',
+					height: '30dp',
+					left: '0dp',
+					image: '/images/pause.png',
+					id: i
+				});
+
+				var audioPlayer = Titanium.Media.createAudioPlayer({
+					url: data[i].previewUrl,
+					preload: true,
+					id: i
+				});
+
+				arrayListRefAudio.push(audioPlayer);
+
+
+				var pb = Titanium.UI.createProgressBar({
+					width: '250dp',
+					left: '40dp',
+					height: 'auto',
+					min: 0,
+					max: totalDurationFromBackend,
+					value: 0,
+					color: '#fff',
+					style: Titanium.UI.iPhone.ProgressBarStyle.PLAIN
+				});
+				arrayPbRefAudio.push(pb);
+
+				audioPlayer.addEventListener('progress', function (e) {
+					Ti.API.info('Time Played: ' + Math.round(e.progress) + ' milliseconds');
+					arrayPbRefAudio[e.source.id].value = Math.round(e.progress / 1000);
+				});
+
+				arrayStartPauseButton.push(startPauseButton);
+
+				startPauseButton.addEventListener('click', function (e) {
+					Ti.API.info('click!');
+					for (var j in arrayListRefAudio) {
+						if (j != e.source.id) {
+							arrayListRefAudio[j].pause();
+							arrayStartPauseButton[j].image = '/images/icon_play.png';
+						}
+					}
+					if (arrayListRefAudio[e.source.id].playing) {
+						arrayListRefAudio[e.source.id].pause();
+						e.source.image = '/images/icon_play.png';
+					}
+					else {
+						arrayListRefAudio[e.source.id].play();
+						e.source.image = '/images/pause.png';
+					}
+				});
+				contentMusic.add(titleMusic);
+				contentMusic.add(audioPlayer);
+				contentMusic.add(pb);
+				contentMusic.add(startPauseButton);
+				contentMusic.add(separatorDepto);
+				pb.show();
+				if (i == 0) {
+					audioPlayer.play();
+				}
+				else {
+					startPauseButton.image = '/images/icon_play.png';
+				}
+
+				listMusic.add(contentMusic);
+
+			}
+		}
 	}
 
 	function resultados(result) {
-		// Ti.API.info('result:', result);
-		webviewMain.url = result;
+		Ti.API.info('result:', result);
 	}
+
+
 
 	function gotUrl(result) {
 
@@ -1069,6 +1047,32 @@ function mainApp() {
 	} else {
 		nav.open();
 	}
+
+	self.addEventListener('android:back', function (e) {
+
+		if (openViewMusic == false) {
+			e.cancelBubble = true;
+			if (clicking == false) {
+				clicking = true;
+				ripple.round({
+					source: leftButton
+				});
+			}
+		}
+		else {
+			openViewMusic = true;
+			for (var j in arrayListRefAudio) {
+				arrayListRefAudio[j].stop();
+			}
+			arrayListRefAudio = [];
+			arrayPbRefAudio = [];
+			arrayStartPauseButton = [];
+			boxBottom.scrollToView(0);
+		}
+
+
+	});
+
 
 	function hideSoftKeyboard() {
 		if (Config.isAndroid) {

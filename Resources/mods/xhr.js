@@ -841,7 +841,7 @@ exports.apiItunnes = function(callback, params) {
 	var textFind = params['text'];
 	
 	// Ti.API.info('URL:',  Config.SERVER_BASE_URL + 'search?term='+textFind+'&mediaType=music&limit=20');
-	client.open('GET', Config.SERVER_BASE_URL + 'search?term='+textFind+'&mediaType=music&limit=20');
+	client.open('GET', Config.SERVER_BASE_URL + 'search?term='+textFind+'&mediaType=music&limit=200');
 	// client.setRequestHeader('Api_version', Config.api_version);
 	// client.setRequestHeader('Token', token);
 	client.send();

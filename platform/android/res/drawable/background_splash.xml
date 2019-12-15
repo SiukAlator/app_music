@@ -9,6 +9,10 @@
         android:drawable="@drawable/default_"
         android:gravity="center" />-->
    <item
+        android:left="20dp"
+        android:right="20dp"
+        android:width="320dp"
+        android:height="290dp"
         android:drawable="@drawable/splash"
         android:gravity="center" />
 </layer-list>
