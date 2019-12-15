@@ -846,3 +846,33 @@ exports.apiItunnes = function(callback, params) {
 	// client.setRequestHeader('Token', token);
 	client.send();
 };
+
+exports.getMusicAlbum = function(callback, params) {
+
+	if (Config.mode == 0) {
+		Ti.API.info('xhr.findDateSalaR->params: ' + JSON.stringify(params));
+	}
+	var client = Ti.Network.createHTTPClient({
+		onload : function(e) {
+			if (Config.mode == 0) {
+				Ti.API.info('xhr.findDateSalaR: ' + this.responseText);
+			}
+			// var json = JSON.parse(this.responseText);
+			callback(this.responseText);
+		},
+		onerror : function(e) {
+			Ti.API.debug(e.error);
+			callback(false);
+		},
+		timeout : Config.timeOut
+	});
+	var collectionId = params['collectionId'];
+	var trackId = params['trackId'];
+	
+	Ti.API.info('URL:',  'https://geo.itunes.apple.com/us/album/the-journey/id'+collectionId+'?i='+trackId+'&mt=1&app=music');
+	client.open('GET', 'http://a1299.phobos.apple.com/us/r30/Music7/v4/3a/a3/01/3aa30184-78e2-7030-c6e0-d33f3d3e21b7/mzaf_3396140578378232458.plus.aac.p.m4a');
+	// client.setRequestHeader('Api_version', Config.api_version);
+	// client.setRequestHeader('Token', token);
+	client.send();
+};
+
