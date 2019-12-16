@@ -81,12 +81,7 @@
     <theme>default</theme>
   </mobileweb>
   <modules>
-    <module platform="android" version="2.0.2">dk.napp.drawer</module>
-    <module platform="android" version="4.2.0">ti.goosh</module>
-    <module platform="iphone" version="1.2.4">dk.napp.drawer</module>
     <module platform="commonjs">ti.cloud</module>
-    <module platform="android">firebase.cloudmessaging</module>
-    <module platform="android">firebase.core</module>
     <module platform="android">ti.playservices</module>
   </modules>
   <deployment-targets>
@@ -99,9 +94,4 @@
   <sdk-version>7.4.1.GA</sdk-version>
   <guid>10f26c94-10e3-4952-9fff-9d129bcf7f00</guid>
   <property name="appc-app-id" type="string">5d11a0acf0d65b564e799555</property>
-  <property name="ti.goosh.defaultChannel">VisitorApp</property>
-  <property name="gcm.senderid" type="string">250513612644</property>
-  <property name="acs-push-type-development" type="string">gcm</property>
-  <property name="acs-push-type-production" type="string">gcm</property>
-  <property name="acs-push-type" type="string">gcm</property>
 </ti:app>

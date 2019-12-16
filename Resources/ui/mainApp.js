@@ -7,9 +7,7 @@ function mainApp() {
 
 
 	var clicking = false;
-	var imageWallpaper = Config.wallpaperApp;
 
-	var local = Config.locale;
 	var self = Ti.UI.createWindow({
 		title: L('login_title'),
 		navBarHidden: false,
@@ -33,18 +31,6 @@ function mainApp() {
 	var flagFromLastSong = false;
 
 	var listMusic;
-	var webviewMain;
-
-	// var boxBottom = Ti.UI.createView({
-	// 	top: '0dp',
-	// 	left: '0dp',
-	// 	right: '0dp',
-	// 	height: Ti.UI.SIZE,
-	// 	width: Ti.UI.FILL,
-	// 	layout: 'vertical'
-
-	// });
-
 	var boxBottom;
 
 
@@ -63,13 +49,6 @@ function mainApp() {
 		bottom: '0dp',
 		top: '0dp'
 	});
-
-	var work1 = Ti.UI.createView({
-		height: Ti.UI.FILL,
-		width: Ti.UI.FILL,
-		zindex: 999
-	});
-
 
 
 	if (!Config.isAndroid) {
@@ -187,8 +166,6 @@ function mainApp() {
 			borderWidth: '1dp',
 			top: '10dp',
 			height: '50dp',
-			// left: Config.marginViewSeguimiento,
-			// right: Config.marginViewSeguimiento,
 			left: '20dp',
 			width: '280dp',
 			bubbleParent: false
@@ -224,9 +201,7 @@ function mainApp() {
 			width: Ti.UI.FILL,
 			height: Ti.UI.FILL,
 			layout: 'vertical',
-			// scrollType: 'vertical',
 			top: '0dp',
-			//bottom : '60dp',
 			left: '1dp',
 			right: '1dp'
 		});
@@ -248,50 +223,6 @@ function mainApp() {
 		var boxDesa = null;
 
 
-
-		var boxTitle = Ti.UI.createView({
-			top: '30dp',
-			height: Ti.UI.SIZE,
-			width: '190dp'
-		});
-
-		var pic = Ti.UI.createImageView({
-			image: '/images/icon_play_2.png',
-			height: '60dp',
-			width: '60dp',
-			top: '-5dp',
-			right: '140dp',
-			touchEnabled: false
-		});
-
-		var head1Label = Ti.UI.createLabel({
-			text: 'App ',
-			font: Config.head2,
-			color: Config.color1,
-			height: 'auto',
-			//width : Ti.UI.FILL,
-			top: '0dp',
-			right: '83dp',
-			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-			touchEnabled: false
-		});
-
-		var head2Label = Ti.UI.createLabel({
-			text: 'Music',
-			font: Config.head2,
-			color: Config.white,
-			height: 'auto',
-			//width : 'auto',
-			top: '0dp',
-			right: '0dp',
-			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-			touchEnabled: false
-		});
-
-
-		// boxTitle.add(pic);
-		// boxTitle.add(head1Label);
-		// boxTitle.add(head2Label);
 
 		iconSearch.addEventListener('click', function (e) {
 			/* Llamada a API iTunnes */
@@ -341,7 +272,6 @@ function mainApp() {
 		if (Config.modeURL == 0)
 			content.add(boxDesa);
 		content.add(scroll1);
-		//content.add(boxBottom);
 
 		work.push(mask1);
 		work.push(myLoginIndicator);
@@ -384,7 +314,6 @@ function mainApp() {
 
 		}
 		else {
-			Ti.API.info('ECHO 1');
 			var labelUB = Ti.UI.createLabel({
 				font: {
 					fontSize: '16dp'
@@ -397,7 +326,6 @@ function mainApp() {
 			});
 
 			viewLastSong.add(labelUB);
-			Ti.API.info('pasooo');
 			// return true;
 
 			for (var i in dataLastSong) {
@@ -458,12 +386,7 @@ function mainApp() {
 							work[w].show();
 						}
 						setViewMusic(e.source.data);
-						for (var w in work) {
-							work[w].hide();
-						}
-						openViewMusic = true;
 						flagFromLastSong = true;
-						boxBottom.scrollToView(1);
 
 						clicking = false;
 					}
@@ -475,12 +398,11 @@ function mainApp() {
 				contentDepto.add(separatorDepto);
 				contentDepto.add(rowImage);
 				viewLastSong.add(contentDepto);
-				//i++;
+
 
 			}
 		}
 
-		//viewLastSong
 	}
 
 	function callApi(textSearch) {
@@ -562,13 +484,6 @@ function mainApp() {
 					Ti.API.info('data:', e.source.data);
 					db.insertLASTSONG(e.source.data);
 					setViewMusic(e.source.data);
-					for (var w in work) {
-						work[w].hide();
-					}
-					openViewMusic = true;
-
-					boxBottom.scrollToView(1);
-
 					clicking = false;
 				}
 			});
@@ -620,9 +535,9 @@ function mainApp() {
 			tvListMusic.setHeight(Ti.UI.FILL);
 			allDataResultSearch = data.results;
 			Ti.API.info('count result:', allDataResultSearch.length);
+			var countBreak = 1;
 			for (var i = tvListMusic.indexNum; i < allDataResultSearch.length; i++) {
-				// Ti.API.info('result:', data.results[i]);
-				if ((i + 1) % 20 == 0)
+				if (countBreak == 20)
 					break;
 				var rowBoxOrange = Ti.UI.createView({
 					backgroundColor: Config.colorPrimario2,
@@ -683,13 +598,7 @@ function mainApp() {
 						Ti.API.info('data:', e.source.data);
 						db.insertLASTSONG(e.source.data);
 						setViewMusic(e.source.data);
-						for (var w in work) {
-							work[w].hide();
-						}
 						openViewMusic = true;
-
-						boxBottom.scrollToView(1);
-
 						clicking = false;
 					}
 				});
@@ -700,11 +609,10 @@ function mainApp() {
 				contentDepto.add(rowImage);
 				rows.push(contentDepto);
 				tvListMusic.indexNum = i + 1;
-				//i++;
+				countBreak ++;
 
 			}
 			tvListMusic.data = rows;
-			// boxBottom.add(tvListMusic);
 		}
 		for (var w in work) {
 			work[w].hide();
@@ -713,7 +621,6 @@ function mainApp() {
 	}
 
 	function setViewMusic(data) {
-		//TODO:
 		openMusic.removeAllChildren();
 		var titleMusic = Ti.UI.createLabel({
 			font: {
@@ -786,7 +693,6 @@ function mainApp() {
 
 
 		listMusic = Ti.UI.createScrollView({
-			// backgroundColor: Config.red,
 			top: '0dp',
 			layout: 'vertical',
 			height: Ti.UI.FILL,
@@ -809,6 +715,29 @@ function mainApp() {
 
 	function loadBanda(dataIn) {
 		/**Se filtran solo los tracks que correspondan a idAlbum */
+		if (dataIn == false)
+		{
+			for (var w in work) {
+				work[w].hide();
+			}
+
+			var dialog = Ti.UI.createAlertDialog({
+				title: L('login_dialog1Title'),
+				message: L('login_dialog1Message'),
+				ok: L('login_dialog1Ok')
+			});
+			dialog.show();
+			return true;
+			// openViewMusic = false;
+			// silenceAll();
+			// if (flagFromLastSong == true) {
+			// 	flagFromLastSong = false;
+			// 	boxBottom.scrollToView(2);
+			// }
+			// else
+			// 	boxBottom.scrollToView(0);
+
+		}
 		var data = dataIn.results;
 		var totalDurationFromBackend = 30;
 		var countId = 0;
@@ -917,6 +846,12 @@ function mainApp() {
 
 			}
 		}
+		for (var w in work) {
+			work[w].hide();
+		}
+		openViewMusic = true;
+
+		boxBottom.scrollToView(1);
 	}
 
 	function resultados(result) {
@@ -946,8 +881,6 @@ function mainApp() {
 
 				case '200':
 
-					// var Window = require('/ui/Authorize');
-					// new Window(nav, login, result.response.data.url);
 					for (var w in work) {
 						work[w].hide();
 					}
@@ -986,287 +919,7 @@ function mainApp() {
 		}
 	}
 
-	function validaRut(rutCompleto) {
-
-		Ti.API.info('rutCompleto: ', rutCompleto);
-
-		if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto))
-			return false;
-		var tmp = rutCompleto.split('-');
-		var digv = tmp[1];
-		var rut = tmp[0];
-
-		if (digv == '1') {
-			digv = 'k';
-			return (validaDv(rut) == digv) || (validaDv(rut) == '1');
-		} else
-			return (validaDv(rut) == digv);
-	}
-
-	function validaDv(T) {
-		var M = 0,
-			S = 1;
-		for (; T; T = Math.floor(T / 10))
-			S = (S + T % 10 * (9 - M++ % 6)) % 11;
-
-		return S ? S - 1 : 'k';
-	}
-
-	function fechaHoy() {
-		var selectedDate = new Date();
-		var dia = '';
-		var mes = '';
-		var ano = '';
-
-		var mes_int = selectedDate.getMonth() + 1;
-		if (selectedDate.getDay() < 10) {
-			dia = '0' + selectedDate.getDay();
-		} else {
-			dia = selectedDate.getDay();
-		}
-		if (mes_int < 10) {
-			mes = '0' + mes_int;
-		} else {
-			mes = mes_int;
-		}
-
-		ano = selectedDate.getFullYear();
-
-		var hora = selectedDate.getHours();
-		var minu = selectedDate.getMinutes();
-		var sec = selectedDate.getSeconds();
-
-		var fechaHoy = ano + "-" + mes + "-" + dia + " " + hora + ":" + minu + ":" + sec;
-		Ti.API.info('Fecha HOY:', fechaHoy);
-		return fechaHoy;
-
-	}
-
-	function postLogin() {
-		userInput.value = "";
-		passInput.value = "";
-		for (var w in work) {
-			work[w].hide();
-		}
-	}
-
-	function loginResponse(result) {
-
-		if (result == false) {
-
-			for (var w in work) {
-				work[w].hide();
-			}
-
-			var dialog = Ti.UI.createAlertDialog({
-				title: L('login_dialog1Title'),
-				message: L('login_dialog1Message'),
-				ok: L('login_dialog1Ok')
-			});
-			dialog.show();
-
-		} else {
-
-
-
-			switch (result.status.code) {
-
-				case '200':
-					Ti.App.Properties.setString('fhora_entrada', fechaHoy());
-					Ti.App.Properties.setString('me', result.response.data.session_token);
-					Ti.App.Properties.setString('perfil', result.response.data.profile_type);
-					Ti.App.Properties.setString('name', result.response.data.name);
-					Ti.App.Properties.setString('last_name', result.response.data.last_name);
-					Ti.App.Properties.setString('phone', result.response.data.phone);
-					Ti.App.Properties.setString('email', result.response.data.email);
-					Ti.App.Properties.setString('name_perfil', result.response.data.name_perfil);
-					Ti.App.Properties.setInt('first_login', result.response.data.first_login);
-					Ti.App.Properties.setString('id_user', result.response.data.id_user);
-					Ti.App.Properties.setString('id_photo', result.response.data.id_photo);
-					Ti.App.Properties.setBool('flagAC', result.response.data.flagAC);
-
-					if (result.response.data.first_login == 1) {
-
-						var Window = require('/ui/firstLogin');
-						new Window(null, 0, null, postLogin);
-						if (Config.isAndroid) {
-							////Config.tracker.endSession();
-							//Config.ga.dispatch();
-							//TODO: Se comenta para cambio de sesión
-							//self.close();
-
-						} else {
-							////Config.tracker.endSession();
-							//Config.ga.dispatch();
-							nav.close();
-						}
-					} else {
-						//if (result.response.data.id_photo != null && result.response.data.id_photo != '')
-						Ti.App.Properties.setString('id_photo', result.response.data.id_photo);
-						//else
-						//	Ti.App.Properties.setString('id_photo', null);
-
-						var Window = require('/ui/p_propietario/Menu');
-						new Window(postLogin);
-						if (Config.isAndroid) {
-							////Config.tracker.endSession();
-							//Config.ga.dispatch();
-							//TODO: Se comenta para cambio de sesión
-							//self.close();
-
-						} else {
-							////Config.tracker.endSession();
-							//Config.ga.dispatch();
-							nav.close();
-						}
-
-					}
-
-					break;
-
-				case '401':
-
-					for (var w in work) {
-						work[w].hide();
-					}
-
-					var dialog = Ti.UI.createAlertDialog({
-						title: L('login_dialog3Title'),
-						message: L('login_dialog3Message'),
-						ok: L('login_dialog3Ok')
-					});
-					dialog.show();
-					break;
-				case '406':
-
-					for (var w in work) {
-						work[w].hide();
-					}
-
-					var dialog = Ti.UI.createAlertDialog({
-						title: 'Login',
-						message: 'Usuario no existe en nuestro sistema. Favor contacte con el administrador.',
-						ok: L('login_dialog3Ok')
-					});
-					dialog.show();
-					break;
-				case '402':
-
-					for (var w in work) {
-						work[w].hide();
-					}
-
-					var dialog = Ti.UI.createAlertDialog({
-						title: 'Login',
-						message: 'Contraseña incorrecta, favor intente nuevamente.',
-						ok: L('login_dialog3Ok')
-					});
-					dialog.show();
-					break;
-				default:
-
-					for (var w in work) {
-						work[w].hide();
-					}
-
-					var dialog = Ti.UI.createAlertDialog({
-						title: L('login_dialog2Title'),
-						message: L('login_dialog2Message'),
-						ok: L('login_dialog2Ok')
-					});
-					dialog.show();
-					break;
-
-			}
-
-		}
-
-	}
-
-
-
-
-	function finish() {
-		clicking = false;
-	}
-
-	function resume(e) {
-
-		if (Config.mode == 0) {
-			Ti.API.info('resume e: ' + JSON.stringify(e));
-		}
-
-		if (Config.isAndroid && typeof Ti.Android.currentActivity.intent.data != 'undefined')
-			Config.intentData = Ti.Android.currentActivity.intent.data;
-
-		if (!Config.isAndroid && typeof Ti.App.getArguments().url != 'undefined')
-			Config.intentData = Ti.App.getArguments().url;
-
-		if (Config.intentData != null) {
-
-			if (Config.mode == 0) {
-				Ti.API.info(JSON.stringify(Config.intentData));
-				Ti.API.info(Config.intentData.split('login?')[1].split('=')[0]);
-			}
-
-			setTimeout(function (e) {
-
-				if (Config.intentData.split('login?')[1].split('=')[0] == 'error') {
-					var dialog = Ti.UI.createAlertDialog({
-						title: L('login_dialog5Title'),
-						message: L('login_dialog5Message'),
-						ok: L('login_dialog5Ok')
-					});
-					dialog.show();
-				}
-
-				if (Config.intentData.split('login?')[1].split('=')[0] == 'invalid_mail') {
-					var dialog = Ti.UI.createAlertDialog({
-						title: L('login_dialog6Title'),
-						message: L('login_dialog6Message'),
-						ok: L('login_dialog6Ok')
-					});
-					dialog.show();
-				}
-
-				if (Config.intentData.split('login?')[1].split('=')[0] == 'invalid_mail_domain') {
-					var dialog = Ti.UI.createAlertDialog({
-						title: L('login_dialog7Title'),
-						message: L('login_dialog7Message'),
-						ok: L('login_dialog7Ok')
-					});
-					dialog.show();
-				}
-
-				if (Config.intentData.split('login?')[1].split('=')[0] == 'old_token') {
-					var dialog = Ti.UI.createAlertDialog({
-						title: L('login_dialog8Title'),
-						message: L('login_dialog8Message'),
-						ok: L('login_dialog8Ok')
-					});
-					dialog.show();
-				}
-
-				if (Config.intentData.split('login?')[1].split('=')[0] == 'email') {
-
-
-					var params = {
-						email: Config.intentData.split('email=')[1].split('&')[0],
-						code: Config.intentData.split('code=')[1].split('&')[0],
-						origen: 1
-					};
-					xhr.login(loginResponse, params);
-
-				}
-
-			}, 500);
-
-		}
-
-	}
-
 	construct();
-	// resume();
 
 
 	var flagsetHeightContentIni = true;

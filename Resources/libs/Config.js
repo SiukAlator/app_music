@@ -15,21 +15,9 @@ Config.modeURL = 1;
 
 if (Config.isAndroid) {
 	Config.device_type = 'android';
-	Config.TiGoosh = require('ti.goosh');
 	Config.androidCode = Ti.App.Android.getAppVersionCode();
 } else {
 	Config.device_type = 'ios';
-}
-Config.gaEnable = false;
-if (Config.gaEnable) {
-	Config.ga = require('ti.ga');
-	Config.ga.setDispatchInterval(15);
-
-	Config.tracker = Config.ga.createTracker({
-		trackingId: 'UA-80789719-3',
-		useSecure: true,
-		debug: true
-	});
 }
 
 //Config.tracker.startSession();
@@ -334,16 +322,7 @@ Config.wallpaperApp = '/images/fondo_leqtus_oscuro.jpg';
 Config.AppVersion = Titanium.App.getVersion();
 Config.densityScreen = Titanium.Platform.displayCaps.density;
 
-var wsTest = 'https://mobile-test.visitor.cl/';
-var wsProd = 'http://35.184.183.75:8012/';
-var wsLocal = 'http://192.168.1.120/';
-Config.timeOut = 50000;
 
-
-if (Config.modeURL == 1)
-	ip = wsProd;
-else
-	ip = wsTest;
 
 
 Config.timeOut = 50000;
